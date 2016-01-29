@@ -74,8 +74,7 @@ public final class RxScreenshotDetector {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static Observable<String> start(final Context context) {
         return RxPermissions.getInstance(context)
-                .request(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .flatMap(new Func1<Boolean, Observable<String>>() {
                     @Override
                     public Observable<String> call(Boolean granted) {
