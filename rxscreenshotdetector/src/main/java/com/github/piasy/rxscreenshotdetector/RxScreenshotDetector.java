@@ -130,8 +130,6 @@ public final class RxScreenshotDetector {
                 };
                 contentResolver.registerContentObserver(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, contentObserver);
-                contentResolver.registerContentObserver(
-                        MediaStore.Images.Media.INTERNAL_CONTENT_URI, true, contentObserver);
 
                 subscriber.add(unsubscribeInUiThread(new Action0() {
                     @Override

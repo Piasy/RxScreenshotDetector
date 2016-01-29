@@ -1,5 +1,5 @@
 # RxScreenshotDetector
-Android screenshot detector with ContentProvider and Rx.
+Android screenshot detector with ContentObserver and Rx.
 
 ## ScreenShot
 
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.piasy:rxscreenshotdetector:1.0.0'
+    compile 'com.github.piasy:rxscreenshotdetector:1.0.1'
 }
 ```
 
