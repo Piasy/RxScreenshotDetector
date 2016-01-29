@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply from: "${rootProject.rootDir}/bintray.gradle"
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.releaseVersionCode
+        versionName rootProject.ext.releaseVersionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile ('io.reactivex:rxandroid:1.1.0') {
+        exclude module: 'rxjava'
+    }
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.5.1@aar'
+}
