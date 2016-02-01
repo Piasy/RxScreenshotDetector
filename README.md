@@ -50,6 +50,9 @@ RxScreenshotDetector.start(getApplicationContext())
 
 See [full example](https://github.com/Piasy/RxScreenshotDetector/tree/master/app) for more details.
 
+## Dev tips
++  You need create an empty file named `bintray.properties`, which is used for uploading artifact to bintray.
+
 ## Acknowledgements
 +  `unsubscribeInUiThread` method is grabed from [ReactiveNetwork](https://github.com/pwittchen/ReactiveNetwork).
 +  Thanks for [RxPermissions](https://github.com/tbruyelle/RxPermissions), for request permission in reactive way.
