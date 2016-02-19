@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.piasy:rxscreenshotdetector:1.0.2'
+    compile 'com.github.piasy:rxscreenshotdetector:1.0.3'
 }
 ```
 

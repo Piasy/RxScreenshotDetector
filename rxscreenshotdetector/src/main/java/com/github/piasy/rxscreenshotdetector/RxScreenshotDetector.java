@@ -110,9 +110,7 @@ public final class RxScreenshotDetector {
                                     long currentTime = System.currentTimeMillis() / 1000;
                                     Log.d(TAG, "path: " + path + ", dateAdded: " + dateAdded +
                                             ", currentTime: " + currentTime);
-                                    if (path.toLowerCase().contains("screenshot") &&
-                                            Math.abs(currentTime - dateAdded) <=
-                                                    DEFAULT_DETECT_WINDOW_SECONDS) {
+                                    if (matchPath(path) && matchTime(currentTime, dateAdded)) {
                                         subscriber.onNext(path);
                                     }
                                 }
@@ -138,6 +136,14 @@ public final class RxScreenshotDetector {
                 }));
             }
         });
+    }
+
+    private static boolean matchPath(String path) {
+        return path.toLowerCase().contains("screenshot") || path.contains("截屏");
+    }
+
+    private static boolean matchTime(long currentTime, long dateAdded) {
+        return Math.abs(currentTime - dateAdded) <= DEFAULT_DETECT_WINDOW_SECONDS;
     }
 
     /**

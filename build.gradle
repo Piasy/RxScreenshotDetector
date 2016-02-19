@@ -27,8 +27,8 @@ task clean(type: Delete) {
 
 ext {
     groupName = 'com.github.piasy'
-    releaseVersionCode = 3
-    releaseVersionName = '1.0.2'
+    releaseVersionCode = 4
+    releaseVersionName = '1.0.3'
 
     androidCompileSdkVersion = 'Google Inc.:Google APIs:23'
     androidBuildToolsVersion = '23.0.2'
