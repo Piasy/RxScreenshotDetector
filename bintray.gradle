@@ -27,8 +27,8 @@ import java.text.SimpleDateFormat
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-def siteUrl = 'https://github.com/Piasy/RxScreenshotDetector'
-def gitUrl = 'https://github.com/Piasy/RxScreenshotDetector.git'
+def siteUrl = "https://github.com/Piasy/${rootProject.ext.artifactName}"
+def gitUrl = "https://github.com/Piasy/${rootProject.ext.artifactName}.git"
 
 group = rootProject.ext.groupName
 version = rootProject.ext.releaseVersionName
@@ -40,7 +40,7 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'RxScreenshotDetector'
+                name rootProject.ext.artifactName
                 url siteUrl
                 // Set your license
                 licenses {
@@ -102,13 +102,13 @@ bintray {
     publish = true //If version should be auto published after an upload
     pkg {
         repo = 'maven'
-        name = 'RxScreenshotDetector'
-        desc = 'Android screenshot detector with ContentProvider and Rx.'
+        name = rootProject.ext.artifactName
+        desc = rootProject.ext.artifactDescription
         websiteUrl = siteUrl
         issueTrackerUrl = siteUrl + '/issues'
         vcsUrl = gitUrl
         licenses = ['MIT']
-        labels =  ['rx', 'android', 'screenshot', 'detector']
+        labels = rootProject.ext.artifactLabels
         publicDownloadNumbers = true
         //Optional version descriptor
         version {

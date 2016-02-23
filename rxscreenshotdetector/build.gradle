@@ -24,5 +24,5 @@ dependencies {
     compile ('io.reactivex:rxandroid:1.1.0') {
         exclude module: 'rxjava'
     }
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.5.1@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.5.2@aar'
 }
