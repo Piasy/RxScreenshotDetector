@@ -50,6 +50,8 @@ RxScreenshotDetector.start(getApplicationContext())
 
 See [full example](https://github.com/Piasy/RxScreenshotDetector/tree/master/app) for more details.
 
+[Download demo apk](https://www.pgyer.com/yaVT).
+
 ## Dev tips
 +  You need create an empty file named `bintray.properties` under root project dir, which is used for uploading artifact to bintray.
 
