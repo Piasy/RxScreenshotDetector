@@ -139,7 +139,8 @@ public final class RxScreenshotDetector {
     }
 
     private static boolean matchPath(String path) {
-        return path.toLowerCase().contains("screenshot") || path.contains("截屏");
+        return path.toLowerCase().contains("screenshot") || path.contains("截屏") ||
+                path.contains("截图");
     }
 
     private static boolean matchTime(long currentTime, long dateAdded) {
