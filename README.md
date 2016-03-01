@@ -10,16 +10,14 @@ Add to gradle dependency of your module build.gradle:
 
 ```gradle
 repositories {
-    maven {
-        url  "http://dl.bintray.com/piasy/maven" 
-    }
+    jcenter()
     maven { 
         url "http://dl.bintray.com/tbruyelle/tbruyelle" 
     }
 }
 
 dependencies {
-    compile 'com.github.piasy:rxscreenshotdetector:1.0.3'
+    compile 'com.github.piasy:rxscreenshotdetector:1.0.5'
 }
 ```
 
