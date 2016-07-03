@@ -1,6 +1,8 @@
 # RxScreenshotDetector
 Android screenshot detector with ContentObserver and Rx.
 
+Note that this library only work as best effort, it won't (and can't I think) cover corner cases. Good luck with it :)
+
 ## ScreenShot
 
 ![screenshot-detector-demo.gif](art/screenshot-detector-demo.gif)
