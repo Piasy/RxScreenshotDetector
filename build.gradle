@@ -5,19 +5,21 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.2.2'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.3.1"
+        classpath 'me.tatarka:gradle-retrolambda:3.3.0'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
 allprojects {
     repositories {
         jcenter()
-        maven { url "http://dl.bintray.com/tbruyelle/tbruyelle" }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -26,16 +28,27 @@ task clean(type: Delete) {
 }
 
 ext {
+    userName = 'Piasy'
+    developer = [
+            id   : 'piasy',
+            name : 'piasy',
+            email: 'xz4215@gmail.com'
+    ]
+    license = [
+            id  : 'MIT',
+            name: 'The MIT License (MIT)',
+            url : 'http://opensource.org/licenses/MIT'
+    ]
     groupName = 'com.github.piasy'
     artifactName = 'RxScreenshotDetector'
     artifactDescription = 'Android screenshot detector with ContentProvider and Rx.'
     artifactLabels = ['rx', 'android', 'screenshot', 'detector']
-    releaseVersionCode = 6
-    releaseVersionName = '1.0.5'
+    releaseVersionCode = 7
+    releaseVersionName = '1.1.0'
 
-    androidCompileSdkVersion = 'Google Inc.:Google APIs:23'
-    androidBuildToolsVersion = '23.0.2'
-    androidSupportSdkVersion = '23.2.0'
-    minSdkVersion = 14
-    targetSdkVersion = 23
+    androidCompileSdkVersion = 24
+    androidBuildToolsVersion = '25.0.0'
+    androidSupportSdkVersion = '25.0.0'
+    minSdkVersion = 16
+    targetSdkVersion = 24
 }

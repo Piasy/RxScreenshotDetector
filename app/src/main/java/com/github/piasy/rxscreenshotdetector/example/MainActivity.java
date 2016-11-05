@@ -5,22 +5,25 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.piasy.rxscreenshotdetector.RxScreenshotDetector;
-import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends RxAppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
+    private static final String[] PROJECTION = new String[] {
+            MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.DATE_ADDED
+    };
+    private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
     @Bind(R.id.mText)
     TextView mTextView;
 
@@ -36,34 +39,16 @@ public class MainActivity extends RxAppCompatActivity {
         super.onResume();
 
         RxScreenshotDetector.start(getApplicationContext())
+                //.compose(bindToLifecycle()) // todo wait for RxLifeCycle 2.x
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(String path) {
+                    public void accept(String path) throws Exception {
                         mTextView.setText(mTextView.getText() + "\nScreenshot: " + path);
                     }
                 });
     }
-
-    private static final String EXTERNAL_CONTENT_URI_MATCHER =
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString();
-    private static final String[] PROJECTION = new String[] {
-            MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.DATA,
-            MediaStore.Images.Media.DATE_ADDED
-    };
-    private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
     @OnClick(R.id.mBtnTest)
     public void getAllMedia() {
@@ -74,12 +59,13 @@ public class MainActivity extends RxAppCompatActivity {
                     PROJECTION, null, null, SORT_ORDER);
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    long dateAdded =
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
+                    String path = cursor.getString(
+                            cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    long dateAdded = cursor.getLong(
+                            cursor.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
                     long currentTime = System.currentTimeMillis() / 1000;
                     Log.d(TAG, "path: " + path + ", dateAdded: " + dateAdded +
-                            ", currentTime: " + currentTime);
+                               ", currentTime: " + currentTime);
                 }
             }
         } catch (Exception e) {

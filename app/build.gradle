@@ -5,7 +5,7 @@ android {
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
 
     defaultConfig {
-        applicationId "com.github.piasy.rxscreenshotdetector"
+        applicationId "com.github.piasy.rxscreenshotdetector.example"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.releaseVersionCode
@@ -18,16 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:${rootProject.ext.androidSupportSdkVersion}"
 
     compile project(':rxscreenshotdetector')
 
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.trello:rxlifecycle:0.4.0'
-    compile 'com.trello:rxlifecycle-components:0.4.0'
 }
