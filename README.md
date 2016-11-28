@@ -12,7 +12,9 @@ Add to gradle dependency of your module build.gradle:
 
 ```gradle
 repositories {
-    jcenter()
+    maven {
+        url  "http://dl.bintray.com/piasy/maven"
+    }
 }
 
 dependencies {
