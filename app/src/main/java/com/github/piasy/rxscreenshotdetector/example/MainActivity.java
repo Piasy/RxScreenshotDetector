@@ -5,18 +5,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.github.piasy.rxscreenshotdetector.RxScreenshotDetector;
+import com.trello.rxlifecycle2.components.RxActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RxActivity {
 
     private static final String TAG = "MainActivity";
     private static final String[] PROJECTION = new String[] {
@@ -24,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
             MediaStore.Images.Media.DATE_ADDED
     };
     private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
-    @Bind(R.id.mText)
+
+    @BindView(R.id.mText)
     TextView mTextView;
 
     @Override
@@ -38,16 +38,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        RxScreenshotDetector.start(getApplicationContext())
-                //.compose(bindToLifecycle()) // todo wait for RxLifeCycle 2.x
+        RxScreenshotDetector.start(this)
+                .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String path) throws Exception {
-                        mTextView.setText(mTextView.getText() + "\nScreenshot: " + path);
-                    }
-                });
+                .subscribe(path -> mTextView.setText(mTextView.getText() + "\nScreenshot: " + path),
+                        Throwable::printStackTrace);
     }
 
     @OnClick(R.id.mBtnTest)

@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
 
         classpath 'me.tatarka:gradle-retrolambda:3.3.0'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
@@ -43,12 +43,12 @@ ext {
     artifactName = 'RxScreenshotDetector'
     artifactDescription = 'Android screenshot detector with ContentProvider and Rx.'
     artifactLabels = ['rx', 'android', 'screenshot', 'detector']
-    releaseVersionCode = 7
-    releaseVersionName = '1.1.0'
+    releaseVersionCode = 8
+    releaseVersionName = '1.2.0'
 
-    androidCompileSdkVersion = 24
-    androidBuildToolsVersion = '25.0.0'
-    androidSupportSdkVersion = '25.0.0'
+    androidCompileSdkVersion = 25
+    androidBuildToolsVersion = '25.0.2'
+    androidSupportSdkVersion = '25.1.1'
     minSdkVersion = 16
-    targetSdkVersion = 24
+    targetSdkVersion = 25
 }

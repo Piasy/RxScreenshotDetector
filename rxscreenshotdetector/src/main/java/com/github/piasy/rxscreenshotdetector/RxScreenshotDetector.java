@@ -25,6 +25,7 @@
 package com.github.piasy.rxscreenshotdetector;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
@@ -33,10 +34,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import hu.akarnokd.rxjava.interop.RxJavaInterop;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Observable;
 
 /**
  * Created by Piasy{github.com/Piasy} on 16/1/29.
@@ -53,6 +51,14 @@ public final class RxScreenshotDetector {
     private static final String SORT_ORDER = MediaStore.Images.Media.DATE_ADDED + " DESC";
     private static final long DEFAULT_DETECT_WINDOW_SECONDS = 10;
 
+    private final Activity mActivity;
+    private final RxPermissions mRxPermissions;
+
+    private RxScreenshotDetector(final Activity activity) {
+        mActivity = activity;
+        mRxPermissions = new RxPermissions(activity);
+    }
+
     /**
      * start screenshot detect, if permission not granted, the observable will terminated with
      * an onError event.
@@ -62,29 +68,38 @@ public final class RxScreenshotDetector {
      * Unsubscribe to free this reference.
      * <p>
      *
-     * @return {@link Flowable} that emits screenshot file path.
+     * @return {@link Observable} that emits screenshot file path.
      */
-    public static Flowable<String> start(final Context context) {
-        return RxPermissions.getInstance(context)
+    public static Observable<String> start(final Activity activity) {
+        return new RxScreenshotDetector(activity)
+                .start();
+    }
+
+    private static boolean matchPath(String path) {
+        return path.toLowerCase().contains("screenshot") || path.contains("截屏") ||
+               path.contains("截图");
+    }
+
+    private static boolean matchTime(long currentTime, long dateAdded) {
+        return Math.abs(currentTime - dateAdded) <= DEFAULT_DETECT_WINDOW_SECONDS;
+    }
+
+    private Observable<String> start() {
+        return mRxPermissions
                 .request(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .toFlowable(BackpressureStrategy.BUFFER)
                 .flatMap(granted -> {
                     if (granted) {
-                        return startAfterPermissionGranted(context);
+                        return startAfterPermissionGranted(mActivity);
                     } else {
-                        return Flowable.error(new SecurityException("Permission not granted"));
+                        return Observable.error(new SecurityException("Permission not granted"));
                     }
                 });
     }
 
-    public static rx.Observable<String> startAsV1Observable(final Context context) {
-        return RxJavaInterop.toV1Observable(start(context));
-    }
-
-    private static Flowable<String> startAfterPermissionGranted(Context context) {
+    private Observable<String> startAfterPermissionGranted(final Context context) {
         final ContentResolver contentResolver = context.getContentResolver();
 
-        return Flowable.create(emitter -> {
+        return Observable.create(emitter -> {
             final ContentObserver contentObserver = new ContentObserver(null) {
                 @Override
                 public void onChange(boolean selfChange, Uri uri) {
@@ -120,29 +135,8 @@ public final class RxScreenshotDetector {
             contentResolver.registerContentObserver(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, contentObserver);
 
-            emitter.setDisposable(new Disposable() {
-                private boolean mDisposed = false;
-
-                @Override
-                public void dispose() {
-                    mDisposed = true;
-                    contentResolver.unregisterContentObserver(contentObserver);
-                }
-
-                @Override
-                public boolean isDisposed() {
-                    return mDisposed;
-                }
-            });
-        }, BackpressureStrategy.LATEST);
-    }
-
-    private static boolean matchPath(String path) {
-        return path.toLowerCase().contains("screenshot") || path.contains("截屏") ||
-               path.contains("截图");
-    }
-
-    private static boolean matchTime(long currentTime, long dateAdded) {
-        return Math.abs(currentTime - dateAdded) <= DEFAULT_DETECT_WINDOW_SECONDS;
+            emitter.setCancellable(
+                    () -> contentResolver.unregisterContentObserver(contentObserver));
+        });
     }
 }
